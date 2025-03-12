@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int Josephus(int n, int k){  // people index count from 0 to n-1
+int Josephus(int n, int k){  // people sitting in a circle and are numbered from 0 to n-1
     if(n==1) return 0;
      
     return (Josephus(n-1, k) + k) % n;  // at every stemps one person should kill so we do Josephus(n-1, k)
