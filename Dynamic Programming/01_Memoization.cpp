@@ -15,7 +15,7 @@ int nthFibonacci(int n, vector<int> &memo){
 }
 
 int main(){
-    n = 5;
+    n = 20;
     vector<int>memo(n+1, -1);
     cout<<nthFibonacci(n, memo)<<endl;
 }

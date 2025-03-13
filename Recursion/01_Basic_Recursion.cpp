@@ -25,7 +25,7 @@ bool checkPalindrome(int arr[], int l, int r){   // check palindrome
 }
 
 int factorial(int n){  // factorial of a number
-    if(n==1)return 1;
+    if(n==0)return 1;
     return n*factorial(n-1);
 }
 

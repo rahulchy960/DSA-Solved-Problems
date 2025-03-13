@@ -16,18 +16,31 @@ void printNToOne(int n){   // print N to 1
 
 int factorial(int n, int k=1){   // factorial
     start:
-    if(n==1)return k;
+    if(n==0)return k;
     k = k*n;
     n = n-1;
     goto start;
 }
 
-int sumOfN(int n, int sum=0){   // // sum of natural numbers
+int nCr(int n,int r){   // calculation of nCr
+
+    if(r==0 || r==n)return 1;
+    return nCr(n-1, r-1) + nCr(n-1, r);
+}
+
+int sumOfN(int n, int sum=0){  // sum of natural numbers
     start:
     if(n==0) return sum;
     sum += n;
     n = n-1;
     goto start;
+}
+
+int GCD(int a,int b){  // calculate GCD of two numbers
+
+    if(a==b)return a;
+    if(a>b) GCD(a-b,b);
+    else GCD(b-a, a);
 }
 
 #include<bits/stdc++.h>
