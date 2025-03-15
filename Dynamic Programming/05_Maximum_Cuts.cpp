@@ -19,13 +19,13 @@ int maxCutsTabulation(int n, int a, int b, int c){
 
 int maxCuts(int n, int a, int b, int c, vector<int>&memo){
     if(n==0) return 0;        // Base case: If rope length is zero, no cuts are needed
-    if(n<0) return -1;        // If rope length becomes negative, it's not a valid state
-    if(memo[n]==INT_MIN){     // If result is not already computed (indicated by INT_MIN)
+    if(n<0) return -1;        // If rope length becomes negative, it's not a valid result
+    if(memo[n]==INT_MIN){     // If result is not already computed
         int res = max(max(maxCuts(n-a, a, b, c, memo), maxCuts(n-b, a, b, c, memo)), maxCuts(n-c, a, b, c, memo));
                               // Recursively try cutting the rope by lengths a, b, and c
         if(res==-1)           // If no valid cuts are possible, mark it as -1
             memo[n] = -1;
-        else                  // If a valid cut is possible, store the maximum number of cuts
+        else                  // If res is not -1 (meaning a valid solution exists), we increment the cut count by 1
             memo[n] = res+1;
     } 
     return memo[n];   
