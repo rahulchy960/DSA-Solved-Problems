@@ -21,7 +21,7 @@ bool helper(int i, int j, vector<vector<int>>&maze, vector<vector<int>>&sol){
         return true;
     }
     if(isSafe(i, j, maze)){  // If the current cell is safe to visit
-        sol[i][j] = true;    // Mark the cell as part of the solution path
+        sol[i][j] = 1;    // Mark the cell as part of the solution path
         if(helper(i+1, j, maze, sol)) return true;  // Try moving down
         else if(helper(i,j+1, maze, sol)) return true;  // Try moving right
         sol[i][j] = 0;     // Backtrack: Unmark the cell if no path is found

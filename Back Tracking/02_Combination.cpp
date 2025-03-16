@@ -35,3 +35,35 @@ int main(){
         cout<<endl;
     }
 }
+
+
+
+
+/*
+
+class Solution {
+public:
+    vector<vector<int>>res;
+
+    void combinations(int n, int k, vector<int>&arr, vector<int>&temp, int i=0){
+        if(temp.size()==k){
+            res.push_back(temp);
+            return;
+        }
+        for(int j=i;j<n;j++){
+            temp.push_back(arr[j]);
+            combinations(n, k, arr, temp, j+1);
+            temp.pop_back();
+        }
+    }
+    vector<vector<int>> combine(int n, int k) {
+        vector<int>arr(n);
+        for(int i=0;i<n;i++)
+            arr[i] = i+1;
+        vector<int>temp;
+        combinations(n, k, arr, temp);
+        return res;
+    }
+};
+
+*/

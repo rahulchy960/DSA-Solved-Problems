@@ -4,11 +4,13 @@ vector<string>res;
 vector<string>phone = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
 
 void phoneKeypad(string digits, string curr="", int i=0){
+
     // Base case: If the current combination length matches the input digits length
     if(curr.length()==digits.length()){
         res.push_back(curr);
         return;
     }
+
      // Get the current digit's corresponding string and length
     int len = phone[digits[i]-'0'].length();
     string letter = phone[digits[i]-'0'];
@@ -30,3 +32,34 @@ int main(){
         cout<<x<<" ";
     }
 }
+
+
+
+/*
+
+class Solution {
+public:
+    vector<string>res;
+    vector<string>phone = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+
+    void helper(string digits, string curr="", int i=0){
+        if(curr.length() == digits.length()){
+            res.push_back(curr);
+            return;
+        }
+        string letter = phone[digits[i]-'0'];
+        int len  = phone[digits[i]-'0'].length();
+        for(int j=0;j<len;j++){
+            curr.push_back(letter[j]);
+            helper(digits, curr, i+1);
+            curr.pop_back();
+        }
+    }
+    vector<string> letterCombinations(string digits) {
+        if(digits.length()==0)return {};
+        helper(digits);
+        return res;
+    }
+};
+
+*/
