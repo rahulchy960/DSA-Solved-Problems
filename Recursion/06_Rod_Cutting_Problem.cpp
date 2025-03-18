@@ -6,11 +6,12 @@
 using namespace std;
 
 int maxCuts(int n, int a, int b, int c){  // time -> O(3^n)  Aux -> O(n)
-    if(n<0) return -1;
-    if(n==0) return 0;
-    int res = max(max(maxCuts(n-a,a,b,c),maxCuts(n-b, a, b, c)), maxCuts(n-c, a, b, c));
-    if(res==-1)return -1;
-    return res+1;
+    if(n<0) return -1;    // If length becomes negative, return -1 (invalid case)
+    if(n==0) return 0;    //  If length is zero, no more cuts can be made
+    int res = max(max(maxCuts(n-a,a,b,c),maxCuts(n-b, a, b, c)), maxCuts(n-c, a, b, c));  // Recursively try cutting the rod by lengths `a`, `b`, and `c` 
+                                                                                          // and take maximum of cuts
+    if(res==-1)return -1;   // If no valid cuts are found, return -1
+    return res+1;           // If a valid cut is made, increment the result count
 }
 
 int main(){
