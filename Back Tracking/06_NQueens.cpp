@@ -4,8 +4,8 @@ using namespace std;
 /*
 
 The goal is to find one valid solution for the N-Queens problem.
-In this version, once a valid solution is found, the recursion returns immediately (return true;).
-This approach prioritizes finding a solution quickly without exploring all possible configurations.
+In this version, if a valid solution is found, the recursion returns immediately (return true;).
+This approach finding a solution quickly without exploring all possible configurations.
 
 */
 
@@ -69,7 +69,7 @@ int main(){
 
 /*    // Leetcode 52 : N-Queens II
 
-// The goal is to count all possible valid configurations for the N-Queens problem.
+// The goal here is to count all possible valid configurations for the N-Queens problem.
 
 class Solution {
 public:
@@ -108,14 +108,14 @@ public:
 };
 
 
-Here, the loop continues even after finding a valid configuration,
-ensuring all potential solutions are explored.
+Here, we continues the loop even after finding a valid configuration,
+so that al solutions are explored.
 
 There is no return statement inside the loop because the recursion 
 needs to keep exploring all paths.
 
-Each valid configuration must be counted. If you add return inside the loop, 
+Each valid configuration must be counted. If we add return inside the loop, 
 the function would exit immediately after finding the first valid solution — 
-failing to count the remaining ones.
+failing to count the other ones.
 
 */
