@@ -3,15 +3,15 @@ using namespace std;
 int n;
 
 int nthFibonacci(int n, vector<int> &memo){
-    if(memo[n]==-1){
-        int res;
+    if(memo[n]==-1){    // if the subproblem is not calculated
+        int res; 
         if(n==0 || n==1)
             res = n;
         else    
             res = nthFibonacci(n-1, memo) + nthFibonacci(n-2, memo);
-        memo[n] = res;
+        memo[n] = res;  // store the result of subproblems
     }
-    return memo[n];
+    return memo[n];  // return the result of already calculated subproblem
 }
 
 int main(){
