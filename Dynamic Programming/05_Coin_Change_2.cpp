@@ -16,8 +16,8 @@ int coinChange(vector<int>&coins, int n, int amount){
 
 /*
 int coinChange(vector<int>&coins, int n, int amount, vector<vector<int>>&memo){
-    if(amount == 0) memo[amount][n] = 1;
-    if(n==0) memo[amount][n] = 0;
+    if(amount == 0) return 1;
+    if(n==0) return 0;
     if(memo[amount][n] == -1){
         int case1 = coinChange(coins,n-1,amount,memo);
 
