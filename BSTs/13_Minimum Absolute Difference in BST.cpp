@@ -11,19 +11,20 @@
  */
 class Solution {
 public:
-    unordered_set<int>s;
-    bool findTarget(TreeNode* root, int k) {
-
-        if(root == NULL) return false;
-
-        if(findTarget(root->left, k) == true) return true;
-
-        if(s.find(k-root->val) != s.end())
-            return true;
-        s.insert(root->val);
-
-        return findTarget(root->right, k);
-        
+    
+    TreeNode* prev = NULL;
+    int res = INT_MAX;
+    
+    void getMin(TreeNode* root){
+        if(root == NULL) return;
+        getMin(root->left);
+        if(prev != NULL)
+            res = min(res, (root->val - prev->val));
+        prev = root;
+        getMin(root->right);
+    }
+    int getMinimumDifference(TreeNode* root) {
+        getMin(root);
+        return res;
     }
 };
-
