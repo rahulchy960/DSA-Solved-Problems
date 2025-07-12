@@ -146,15 +146,19 @@ int main(){
 
 
 
-/*
-Class: minHeap
-Implements a min heap using an array. Supports:
-1. Insert
-2. Extract Minimum
-3. Decrease Key
-4. Delete Arbitrary Index
-5. Display Heap
-*/
+// Implementation of a Min Heap data structure:
+// --------------------------------------------
+// A Min Heap is a binary tree where:
+//   - Every parent node is less than or equal to its children.
+//   - It is a complete binary tree (all levels fully filled except possibly the last, filled from left to right).
+//
+// Key Operations:
+// 1. Insert(x)     → Insert element and maintain heap property
+// 2. getMin()      → Return the minimum element (root) in O(1)
+// 3. extractMin()  → Remove and return the minimum element and re-heapify
+// 4. decreaseKey() → Decrease the value of a key and restore heap
+// 5. Delete(idx)   → Delete a node at index `idx`
+// 6. buildHeap()   → Convert a random array into a valid min-heap in O(n)
 
 class minHeap {
     int* arr;       // pointer to heap array

@@ -44,44 +44,71 @@ public:
 
 
 
+// Algorithm for Vertical Order Traversal of a Binary Tree:
+//
+// 1. We need to return the vertical order traversal of the binary tree.
+//    Vertical traversal means:
+//      - Nodes that fall in the same vertical line from top to bottom.
+//      - If two nodes are at the same position, sort them by their value.
+//
+// 2. We use a BFS approach and store (node, vertical distance, horizontal distance) in a queue.
+//      - Vertical distance (vd): Level (top-down)
+//      - Horizontal distance (hd): Column (left-right), root is at hd=0
+//
+// 3. To maintain order:
+//      - We use a nested map structure: map<hd, map<vd, multiset<int>>>
+//        - `hd` → horizontal distance (column)
+//        - `vd` → vertical level (depth)
+//        - `multiset` → to store multiple values in sorted order if they exist at the same (hd, vd)
+//
+// 4. BFS Traversal:
+//      - Start with root at (0, 0)
+//      - For each node, push left child at (vd+1, hd-1), right child at (vd+1, hd+1)
+//      - Insert current node's value into the map using its hd and vd
+//
+// 5. After traversal, extract the values from the map:
+//      - Traverse `mp` in order of increasing `hd` (left to right)
+//      - For each `hd`, traverse in increasing `vd` (top to bottom)
+//      - Append all values in the multiset to a temporary vector
+//      - Add this temporary vector to the result
+
 vector<vector<int>> verticalTraversal(TreeNode* root) {
-    // 🌐 Map to hold nodes by horizontal distance (hd) and level (depth)
-    // Structure: hd → depth → multiset of node values (to maintain sorted order)
-    map<int, map<int, multiset<int>>> nodes;
+    // Nested map: hd -> vd -> multiset of node values
+    map<int, map<int, multiset<int>>> mp;
 
-    // 🧭 Queue for BFS traversal
-    // Each item holds: {node, {depth (row), hd (column)}}
+    // BFS queue storing node and its (vd, hd)
     queue<pair<TreeNode*, pair<int, int>>> q;
-    q.push({root, {0, 0}}); // root is at hd = 0, depth = 0
+    q.push({root, {0, 0}}); // root at vd=0, hd=0
 
-    // 🔁 Perform level-order traversal with coordinate tracking
+    // Perform level-order traversal (BFS)
     while (!q.empty()) {
-        auto [curr, pos] = q.front(); q.pop();
-        int depth = pos.first;
-        int hd = pos.second;
+        int n = q.size();
+        for (int i = 0; i < n; i++) {
+            auto p = q.front(); q.pop();
+            TreeNode* curr = p.first;
+            int vd = p.second.first;  // vertical depth
+            int hd = p.second.second; // horizontal distance
 
-        // 🗂 Insert node's value into its correct vertical & level slot
-        nodes[hd][depth].insert(curr->val);
+            // Insert value into map
+            mp[hd][vd].insert(curr->val);
 
-        // 👈 Traverse left child: hd - 1, depth + 1
-        if (curr->left)
-            q.push({curr->left, {depth + 1, hd - 1}});
-
-        // 👉 Traverse right child: hd + 1, depth + 1
-        if (curr->right)
-            q.push({curr->right, {depth + 1, hd + 1}});
-    }
-
-    // 📦 Prepare the final result by flattening the map
-    vector<vector<int>> result;
-    for (auto& [hd, levelMap] : nodes) {
-        vector<int> col;
-        for (auto& [depth, values] : levelMap) {
-            // Add all node values in sorted order
-            col.insert(col.end(), values.begin(), values.end());
+            // Add left and right children with updated coordinates
+            if (curr->left != NULL) q.push({curr->left, {vd + 1, hd - 1}});
+            if (curr->right != NULL) q.push({curr->right, {vd + 1, hd + 1}});
         }
-        result.push_back(col);
     }
 
-    return result;
+    // Prepare the final result
+    vector<vector<int>> res;
+    for (auto x : mp) {
+        vector<int> temp;
+        for (auto y : x.second) {
+            // Insert all values from multiset into temp
+            for (auto itr = y.second.begin(); itr != y.second.end(); itr++)
+                temp.push_back(*itr);
+        }
+        res.push_back(temp); // Add vertical column to result
+    }
+
+    return res;
 }
