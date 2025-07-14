@@ -1,44 +1,7 @@
-#include<bits/stdc++.h>
-using namespace std;
-
-void helper(vector<int>arr, vector<vector<int>>&res, int i=0){
-    if(i==arr.size()-1){   // Base case: If we have reached the last element, store the permutation
-        res.push_back(arr);
-        return;
-    }
-    // fixed every character at the 1st position and generate all permutations
-    // beginning with that character
-    for(int j=i;j<arr.size();j++){  // Swap the current index with all possible indices and recur
-        swap(arr[i], arr[j]);   
-        helper(arr, res, i+1);  // Recursively generate permutations for the remaining elements
-        swap(arr[j], arr[i]);   // Backtrack: Swap back to restore original order
-    }
-}
-
-vector<vector<int>> permute(vector<int>arr){
-    vector<vector<int>>res;
-    helper(arr, res);
-    return res;
-}
-
-int main(){
-    vector<int>arr = {10, 20, 30};
-    vector<vector<int>>res = permute(arr);
-    for(auto x : res){
-        for(int i=0;i<x.size();i++)
-            cout<<x[i]<<" ";
-        cout<<endl;
-    }
-}
-
-
-
-
-/*
 
 class Solution {
 public:
-    static void permuteRec(vector<vector<int>>&res, vector<int>&nums, int i){
+    void permuteRec(vector<vector<int>>&res, vector<int>&nums, int i){
         if(i==nums.size()-1){
             res.push_back(nums);
             return;
@@ -57,4 +20,48 @@ public:
     }
 };
 
-*/
+
+// Algorithm: Generate All Permutations of an Array (Backtracking)
+// ---------------------------------------------------------------
+// Problem:
+//   - Given an array of distinct integers, return all possible permutations.
+//
+// Approach:
+//   - Use recursion and backtracking.
+//   - At each recursion level `i`, fix one element at index `i`
+//     and recursively generate permutations of the remaining subarray.
+//   - For each `j` from i to end:
+//       1. Swap nums[i] and nums[j] to fix nums[i].
+//       2. Recurse to generate all permutations of nums[i+1..end].
+//       3. Backtrack by swapping back to restore the array.
+//
+// Base Case:
+//   - When i == nums.size() - 1, we’ve formed a complete permutation → add to result.
+//
+// Time Complexity: O(n × n!)
+//   - There are n! permutations.
+//   - Each permutation takes O(n) time to copy into result.
+//
+// Auxiliary Space:
+//   - O(n) recursion stack (due to depth of recursion)
+//   - O(n × n!) for storing all permutations in result
+
+void permuteRec(vector<vector<int>>& res, vector<int>& nums, int i) {
+    if (i == nums.size() - 1) {
+        res.push_back(nums); // Base case: store the current permutation
+        return;
+    }
+
+    for (int j = i; j < nums.size(); j++) {
+        swap(nums[i], nums[j]);           // Fix element at index i
+        permuteRec(res, nums, i + 1);     // Recurse for remaining elements
+        swap(nums[j], nums[i]);           // Backtrack to restore original array
+    }
+}
+
+vector<vector<int>> permute(vector<int>& nums) {
+    vector<vector<int>> res;
+    int i = 0;
+    permuteRec(res, nums, i);
+    return res;
+}
