@@ -79,3 +79,85 @@ int main(){
     }
 }
 
+
+
+
+class Solution {
+public:
+    bool isSafe(vector<vector<char>>& board, int i, int j, int x){
+        for(int k=0;k<9;k++){
+            if(board[i][k]==x+'0' || board[k][j]== x+'0')
+                return false;
+        }
+
+        int s = sqrt(board.size());
+        int subR = i-(i%s);
+        int subC = j-(j%s);
+        for(int ii=0;ii<s;ii++){
+            for(int jj=0;jj<s;jj++){
+                if(board[ii+subR][jj+subC]== x+'0')
+                    return false;
+            }
+        }
+        return true;
+        
+
+    }
+    bool helper(vector<vector<char>>& board){
+        int i, j;
+        bool toSolve=false;
+        for(i=0;i<9;i++){
+            for(j=0;j<9;j++){
+                if(board[i][j]=='.'){
+                    toSolve=true;
+                    break;
+                }
+            }
+            if(toSolve) break;
+        }
+
+        if(toSolve==false) return true;
+
+        for(int x=1;x<=9;x++){
+            if(isSafe(board, i, j, x)){
+                board[i][j] = x+'0';
+                if(helper(board)) return true;
+                board[i][j] = '.';
+            }
+        }
+        return false; // never going to reach if had a valid solution
+    }
+    void solveSudoku(vector<vector<char>>& board) {
+        helper(board);
+    }
+};
+
+
+    /*
+    Algorithm:
+    - This is a standard backtracking approach to solve the Sudoku puzzle.
+    - The algorithm scans the board for an empty cell ('.').
+    - For each empty cell, it tries all digits from 1 to 9.
+    - For each digit, it checks if placing it is valid using the isSafe() function:
+        - No repetition in the current row.
+        - No repetition in the current column.
+        - No repetition in the 3x3 sub-grid.
+    - If valid, it places the digit and recursively calls the helper function.
+    - If at any point a placement leads to a dead end, it backtracks (removes the digit and tries next).
+    - The recursion ends when all cells are filled.
+
+    Time Complexity:
+    - In the worst case, there are 81 cells and each can try up to 9 numbers → O(9^81)
+    - But due to constraint pruning (isSafe check), the effective complexity is much lower.
+
+    Space Complexity:
+    - O(1) extra space (only modifies board in-place and uses recursion)
+    - Recursion stack depth up to 81 → O(81) = O(1) for constant-sized 9x9 board
+    */
+
+    
+
+
+
+
+
