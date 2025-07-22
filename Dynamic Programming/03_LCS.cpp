@@ -1,8 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-/*  Recursive solution
-
 int LCS(string s1, string s2, int m, int n){
     if(n==0 || m==0) return 0;
     if(s1[m-1] == s2[n-1]) 
@@ -10,7 +8,24 @@ int LCS(string s1, string s2, int m, int n){
     return max(LCS(s1,s2,m-1,n), LCS(s1,s2,m,n-1));
 }
 
-*/
+
+
+    /*
+    Algorithm (Recursive):
+    - Base Case: If either string is empty, LCS is 0
+    - If last characters match: 
+        → Include it in LCS and recurse on remaining strings
+    - Else:
+        → LCS is the max of removing one char from either string
+
+    Time Complexity:
+    - Exponential: O(2^min(m, n)) due to overlapping subproblems
+
+    Space Complexity:
+    - O(m + n) recursion stack depth
+    */
+
+
 
 /*  Memorization based solution
 
@@ -50,19 +65,25 @@ int LCS(string s1, string s2){
 
 
 
+// Algorithm: Longest Common Subsequence (Tabulation - Bottom-Up DP)
+// ------------------------------------------------------------------
+// Problem:
+//   - Given two strings s1 and s2, find the length of their longest common subsequence.
+//   - A subsequence is a sequence that appears in the same relative order,
+//     but not necessarily contiguous.
+//
+// Approach:
+//   - Use dynamic programming with a 2D table `dp[m+1][n+1]` where:
+//       - dp[i][j] = length of LCS of s1[0...i-1] and s2[0...j-1]
+//   - Initialize the first row and first column with 0s (base case: empty subsequence).
+//   - Transition:
+//       - If characters match: dp[i][j] = 1 + dp[i-1][j-1]
+//       - If not match: dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+//
+// Time Complexity: O(m × n)
+//   - Where m = length of s1, n = length of s2
+//
+// Space Complexity: O(m × n)
+//   - 2D DP table of size (m+1) × (n+1)
 
-int main(){
-    string s1 = "abc";
-    string s2 = "def";
-    int m = s1.length();
-    int n = s2.length();
 
-    // cout<<LCS(s1,s2,m,n)<<endl;  
-
-    // vector<vector<int>>memo(m+1,vector<int>(n+1,-1));
-    // cout<<LCS(s1,s2,m,n,memo)<<endl;  
-
-    cout<<LCS(s1,s2)<<endl;
-
-
-}
