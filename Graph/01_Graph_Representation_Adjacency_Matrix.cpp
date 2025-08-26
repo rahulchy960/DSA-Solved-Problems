@@ -16,9 +16,8 @@ void printGraph(const vector<vector<bool>> &mat){
 }
 
 int main(){
-    int u = 4;
-    int v = 4;
-    vector<vector<bool>>mat(u, vector<bool>(v, 0));
+    int V = 4;
+    vector<vector<bool>>mat(V, vector<bool>(V, 0));
     addEdge(0,1,mat);
     addEdge(0,2,mat);
     addEdge(1,2,mat);
