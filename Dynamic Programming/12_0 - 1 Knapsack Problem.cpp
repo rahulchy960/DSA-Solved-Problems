@@ -24,6 +24,7 @@ int knapsack(int W, vector<int> &val, vector<int> &wt) {
         vector<vector<int>>dp(n+1, vector<int>(W+1));
         for(int i=0;i<=n;i++) dp[i][0] = 0;
         for(int j=0;j<=W;j++) dp[0][j] = 0;
+        
         for(int i=1;i<=n;i++){
             for(int j=1;j<=W;j++){
                 if(wt[i-1] > j)
