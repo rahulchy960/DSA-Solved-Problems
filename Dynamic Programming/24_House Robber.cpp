@@ -13,24 +13,19 @@ public:
 
 class Solution {
 public:
-    int dp(vector<int>& nums, int n){
-        if(n==1) return nums[n-1];
-        if(n==2) return max(nums[n-1], nums[n-2]);
-        return max(dp(nums, n-1), dp(nums, n-2) + nums[n-1]);
-    }
     int rob(vector<int>& nums) {
         int n = nums.size();
         if(n==1) return nums[0];
         if(n==2) return max(nums[0], nums[1]);
-        vector<int>dp(n+1, 0);
-        dp[1] = nums[0];
-        dp[2] = max(nums[0], nums[1]);
-        for(int i=3;i<=n;i++){
-            int looted = dp[i-2] + nums[i-1];
+        vector<int>dp(n, 0);
+        dp[0] = nums[0];
+        dp[1] = max(nums[0], nums[1]);
+        for(int i=2;i<n;i++){
+            int looted = dp[i-2] + nums[i];
             int notLooted = dp[i-1];
             dp[i] = max(looted, notLooted);
         }
-        return dp[n];
+        return dp[n-1];
     }
 };
 
@@ -99,9 +94,9 @@ State & Recurrence (1-based over prefixes)
 ------------------------------------------
 Let f[i] = best we can do using first i houses (indices 0..i-1):
 - Skip i-th house:   f[i-1]
-- Take i-th house:   nums[i-1] + f[i-2]
+- Take i-th house:   nums[i] + f[i-2]
 So:
-    f[i] = max(f[i-1], f[i-2] + nums[i-1])
+    f[i] = max(f[i-1], f[i-2] + nums[i])
 Base:
     f[0] = 0, f[1] = nums[0]
 
@@ -125,16 +120,16 @@ public:
         if (n == 1) return nums[0];
         if (n == 2) return std::max(nums[0], nums[1]);
 
-        std::vector<int> f(n + 1, 0);
-        f[1] = nums[0];
-        f[2] = std::max(nums[0], nums[1]);
+        std::vector<int> f(n, 0);
+        f[0] = nums[0];
+        f[1] = std::max(nums[0], nums[1]);
 
-        for (int i = 3; i <= n; ++i) {
-            int take = f[i - 2] + nums[i - 1];
+        for (int i = 2; i <= n; ++i) {
+            int take = f[i - 2] + nums[i];
             int skip = f[i - 1];
             f[i] = std::max(take, skip);
         }
-        return f[n];
+        return f[n-1];
     }
 };
 
