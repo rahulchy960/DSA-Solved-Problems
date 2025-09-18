@@ -138,91 +138,101 @@ public:
 
 Problem
 -------
-Given strings s1, s2, s3, determine if s3 can be formed by interleaving s1 and s2,
-preserving the left-to-right order of characters from each string.
+Given strings s1, s2, s3, decide if s3 is a merge of s1 and s2 that preserves the
+left-to-right order within each source string.
 
 Pattern/ Idea
 -------------
-2D Dynamic Programming on prefixes.
-Let dp[i][j] = true iff s3[0..i+j-1] is an interleaving of s1[0..i-1] and s2[0..j-1].
+Think of a **grid walk** on an (|s1|+1) × (|s2|+1) lattice:
+- State (i, j) means we've taken i chars from s1 and j chars from s2 to form s3[0..i+j-1].
+- A **right move** consumes s1[i-1]; a **down move** consumes s2[j-1].
+- s3 is a valid interleaving iff there exists a monotone path from (0,0) to (|s1|,|s2|)
+  whose step label always matches the next character of s3.
+
+This naturally yields DP:
+dp[i][j] = true iff (s3[i+j-1] == s1[i-1] && dp[i-1][j]) OR
+                         (s3[i+j-1] == s2[j-1] && dp[i][j-1]).
 
 Algorithm (step-by-step)
 ------------------------
-1) If |s1| + |s2| != |s3| → return false.
-2) Initialize dp of size (n1+1) x (n2+1) to false; set dp[0][0] = true.
-3) Fill first row/col:
-   - dp[i][0] = dp[i-1][0] && (s1[i-1] == s3[i-1])
-   - dp[0][j] = dp[0][j-1] && (s2[j-1] == s3[j-1])
-4) For i=1..n1, j=1..n2:
-   - k = i + j
-   - From s1: if s1[i-1] == s3[k-1] and dp[i-1][j] → possible
-   - From s2: if s2[j-1] == s3[k-1] and dp[i][j-1] → possible
-   - dp[i][j] = (from s1) || (from s2)
-5) Return dp[n1][n2].
+1) Length gate: if |s1| + |s2| != |s3| → return false.
+2) Create dp of size (n1+1)×(n2+1), dp[0][0] = true (empty + empty = empty).
+3) Initialize first column (only right moves allowed):
+   dp[i][0] = dp[i-1][0] && (s1[i-1] == s3[i-1]).
+4) Initialize first row (only down moves allowed):
+   dp[0][j] = dp[0][j-1] && (s2[j-1] == s3[j-1]).
+5) For i = 1..n1, j = 1..n2:
+   - Let k = i + j be the length of the prefix we try to match in s3.
+   - fromS1 = (s1[i-1] == s3[k-1]) && dp[i-1][j]
+   - fromS2 = (s2[j-1] == s3[k-1]) && dp[i][j-1]
+   - dp[i][j] = fromS1 || fromS2
+6) Return dp[n1][n2].
 
 Correctness (sketch)
 --------------------
-Every prefix of s3 must end with either s1[i-1] or s2[j-1].
-If that last char matches and the remaining prefix is a valid interleave,
-we can build dp[i][j] from dp[i-1][j] or dp[i][j-1]. Induction on i+j proves correctness.
+**Invariant:** dp[i][j] is true ⇔ s3[0..i+j-1] can be formed by interleaving s1[0..i-1] and s2[0..j-1].
+Base case holds at (0,0). Inductively, any valid prefix must end by consuming either s1[i-1]
+or s2[j-1]. If that last char matches s3’s last of the prefix and the preceding state is true,
+then dp[i][j] is true. Conversely, any interleaving path to (i,j) must have come from one of
+the two predecessors, so the recurrence is both necessary and sufficient.
 
 Complexity
 ----------
-Time: O(n1 * n2)
-Space: O(n1 * n2) (can be optimized to O(n2))
+Time: O(n1 * n2)  
+Space: O(n1 * n2)  (optimizable to O(n2) with a rolling 1D array)
 
 Edge Cases / Pitfalls
 ---------------------
-- One of s1 or s2 empty.
-- Early length mismatch.
-- Consecutive identical chars across s1 and s2 (ensure both transitions are considered).
+- One of s1 or s2 empty (handled by first row/column initialization).
+- Repeated characters across s1/s2 require considering **both** transitions (don’t short-circuit one).
+- Early length mismatch must return false.
 
 Optimization if needed
 ----------------------
-- Space optimize to O(n2) with a rolling 1D dp over j (update right-to-left or carefully left-to-right).
+- Space optimize: keep a 1D dp over j; update left-to-right:
+  dp[j] = (dp[j] && s1[i-1]==s3[k-1]) || (dp[j-1] && s2[j-1]==s3[k-1]).
 ========================================================
 */
 
 class Solution {
 public:
     bool isInterleave(string s1, string s2, string s3) {
-        // Length check: necessary condition
+        // Gate on total length
         if (s1.length() + s2.length() != s3.length())
             return false;
 
         int n1 = s1.length(), n2 = s2.length();
 
-        // dp[i][j] ⇒ s3[0..i+j-1] formed by interleaving s1[0..i-1] and s2[0..j-1]
+        // dp[i][j] ⇒ s3[0..i+j-1] is an interleaving of s1[0..i-1] and s2[0..j-1]
         vector<vector<bool>> dp(n1 + 1, vector<bool>(n2 + 1, false));
+        dp[0][0] = true;  // empty + empty = empty
 
-        dp[0][0] = true; // empty + empty = empty
-
-        // Fill first column: only s1 contributes
+        // Only consume from s1 (first column)
         for (int i = 1; i <= n1; i++)
             dp[i][0] = (s3[i - 1] == s1[i - 1]) && dp[i - 1][0];
 
-        // Fill first row: only s2 contributes
+        // Only consume from s2 (first row)
         for (int j = 1; j <= n2; j++)
             dp[0][j] = (s3[j - 1] == s2[j - 1]) && dp[0][j - 1];
 
-        // Fill the rest
+        // Fill the interior of the DP table
         for (int i = 1; i <= n1; i++) {
             for (int j = 1; j <= n2; j++) {
-                int k = i + j;              // length of prefix in s3 we must match
+                int k = i + j;                 // total chars matched in s3 so far
                 bool fromS1 = false, fromS2 = false;
 
-                // If next of s1 matches s3, we can come from dp[i-1][j]
+                // If we take next from s1, the previous state must be dp[i-1][j]
                 if (s3[k - 1] == s1[i - 1])
                     fromS1 = dp[i - 1][j];
 
-                // If next of s2 matches s3, we can come from dp[i][j-1]
+                // If we take next from s2, the previous state must be dp[i][j-1]
                 if (s3[k - 1] == s2[j - 1])
                     fromS2 = dp[i][j - 1];
 
                 dp[i][j] = fromS1 || fromS2;
             }
         }
-
         return dp[n1][n2];
     }
 };
+
