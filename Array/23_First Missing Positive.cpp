@@ -17,6 +17,58 @@ public:
     }
 };
 
+/*
+==================== REVISION BLOCK — LeetCode 41: First Missing Positive (Visited Array Approach) ====================
+
+Problem
+-------
+Given an unsorted integer array nums, find the smallest missing positive integer.
+
+Pattern/ Idea
+-------------
+Presence Marking using Auxiliary Array.
+Idea:
+- Only numbers in the range [1..n] matter.
+- Use a boolean array vis of size n to mark which positive numbers appear.
+- The first index not marked corresponds to the smallest missing positive.
+
+Algorithm (step-by-step)
+------------------------
+1) Let n = nums.size().
+2) Create a boolean array vis of size n, initialized to false.
+3) Traverse nums:
+   - If nums[i] is in range [1..n], mark vis[nums[i] - 1] = true.
+4) Traverse vis from index 0 to n-1:
+   - If vis[i] is false, return i + 1.
+5) If all positions are marked, return n + 1.
+
+Correctness (sketch)
+--------------------
+- Any number ≤ 0 or > n cannot affect the smallest missing positive in [1..n+1].
+- vis[k] being true exactly means (k+1) exists in nums.
+- The first index i where vis[i] is false implies (i+1) is missing.
+- If all 1..n exist, then n+1 is the smallest missing positive.
+
+Complexity
+---------
+Time: O(n)
+Space: O(n) extra
+
+Edge Cases / Pitfalls
+---------------------
+- Negative numbers and zeros are ignored correctly.
+- Duplicates do not affect correctness.
+- Uses extra space → does NOT meet O(1) space constraint of LeetCode 41.
+
+Optimization if needed
+----------------------
+- Convert to in-place hashing (cyclic placement) to achieve O(1) extra space.
+- Your earlier solution using swapping is the optimal one for interviews.
+
+========================================================
+*/
+
+
 class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
